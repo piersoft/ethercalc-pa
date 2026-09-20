@@ -1,4 +1,4 @@
-# ethercalc-gateway
+# EtherCalc PA
 
 Gateway di autenticazione e autorizzazione davanti a
 [EtherCalc](https://github.com/audreyt/ethercalc), pensato per l'uso nella
@@ -147,6 +147,11 @@ la consegna del token di scrittura, il CSRF e il blocco dell'account.
   non è implementato.
 - La condivisione di un foglio tra più utenti non è implementata: un foglio ha
   un solo proprietario, riassegnabile dall'amministratore.
+
+## Licenza
+
+EUPL-1.2, vedi `LICENSE.md`. Il progetto non include né modifica il codice di
+EtherCalc, distribuito separatamente dai suoi autori sotto la propria licenza.
 
 ## Sicurezza
 

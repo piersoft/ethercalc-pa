@@ -1,0 +1,54 @@
+publiccodeYmlVersion: "0.4"
+name: EtherCalc PA
+url: "https://github.com/piersoft/ethercalc-pa"
+softwareVersion: "1.0.0"
+releaseDate: "2026-09-20"
+platforms:
+  - web
+categories:
+  - collaboration
+  - data-collection
+  - data-visualization
+developmentStatus: stable
+softwareType: standalone/web
+description:
+  it:
+    localisedName: EtherCalc PA
+    shortDescription: >-
+      Gateway di autenticazione davanti a EtherCalc per la Pubblica
+      Amministrazione: ogni utente vede solo i propri fogli, all'esterno
+      resta pubblico solo l'export in sola lettura.
+    longDescription: >-
+      EtherCalc consente fogli di calcolo collaborativi in tempo reale ma non
+      prevede autenticazione: chiunque conosca l'indirizzo di un foglio puo'
+      modificarlo. Questo progetto gli mette davanti un gateway che introduce
+      utenti e password, proprieta' dei fogli, registro delle attivita' e un
+      interruttore per foglio che espone in sola lettura l'esportazione in CSV,
+      JSON, XLSX, ODS e HTML. L'export pubblico e' pensato per essere
+      pubblicato come risorsa in un catalogo open data, mentre la modifica
+      resta riservata al proprietario autenticato. Include l'importazione di
+      file CSV, la traduzione italiana completa dell'interfaccia di EtherCalc,
+      una guida in linea e uno script di backup con rotazione. Il gateway non
+      modifica EtherCalc: gli si affianca come livello di autorizzazione
+      interrogato da nginx a ogni richiesta.
+    features:
+      - Autenticazione con utenti e password, sessioni revocabili
+      - Ogni utente vede e modifica solo i propri fogli
+      - Esportazione pubblica in sola lettura, attivabile per singolo foglio
+      - Importazione di file CSV
+      - Registro delle attivita' esportabile in CSV
+      - Interfaccia e guida in italiano
+legal:
+  license: EUPL-1.2
+maintenance:
+  type: community
+  contacts:
+    - name: Francesco Piero Paolicelli
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - it
+it:
+  countryExtensionVersion: "1.0"
+  riuso:
+    codiceIPA: ""

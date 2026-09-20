@@ -1,0 +1,15 @@
+# Dati e segreti: non devono MAI finire nel repository
+.env
+gateway-data/
+ethercalc-data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+backup/
+*.tar.gz
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
