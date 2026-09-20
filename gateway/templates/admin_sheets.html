@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% block title %}Tutti i fogli{% endblock %}
+{% block body %}
+<h1>Tutti i fogli</h1>
+<form class="panel" method="post" action="{{ p }}/gw/admin/sheets/adopt">
+  <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+  <div class="row">
+    <div><label for="sid">Codice di un foglio già esistente in EtherCalc</label><input id="sid" type="text" name="sid" placeholder="b0fm4ld9wiof" required></div>
+    <div><label for="ti">Titolo</label><input id="ti" type="text" name="title" maxlength="120"></div>
+    <div><label for="ow">Proprietario</label><select id="ow" name="owner_id">{% for u in users %}<option value="{{ u.id }}">{{ u.username }}</option>{% endfor %}</select></div>
+    <button>Acquisisci</button>
+  </div>
+  <p class="mute">I fogli creati prima dell'attivazione del gateway non sono raggiungibili finché non vengono acquisiti e assegnati a un utente.</p>
+</form>
+<h2>{{ sheets|length }} fogli registrati</h2>
+<div class="scroll"><table>
+<thead><tr><th>Titolo</th><th>Proprietario</th><th>Esportazione</th><th>Creato il</th><th>Gestione</th></tr></thead>
+<tbody>
+{% for s in sheets %}
+<tr>
+  <td><strong>{{ s.title }}</strong><br><span class="mute">{{ s.id }}</span></td>
+  <td>{{ s.username }}</td>
+  <td>{% if s.public_export %}<span class="tag">Pubblica</span>{% else %}<span class="tag off">Riservata</span>{% endif %}</td>
+  <td>{{ s.created_at|dt }}</td>
+  <td>
+    <details><summary>Riassegna</summary>
+      <form method="post" action="{{ p }}/gw/admin/sheets/{{ s.id }}/assign">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <label for="a{{ loop.index }}">Nuovo proprietario</label>
+        <select id="a{{ loop.index }}" name="owner_id">{% for u in users %}<option value="{{ u.id }}" {{ 'selected' if u.id == s.owner_id }}>{{ u.username }}</option>{% endfor %}</select>
+        <button class="ghost">Riassegna</button>
+      </form>
+    </details>
+    <details><summary>Elimina</summary>
+      <form method="post" action="{{ p }}/gw/admin/sheets/{{ s.id }}/delete">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <span>Cancellazione definitiva del foglio di {{ s.username }}.</span>
+        <button class="danger">Elimina definitivamente</button>
+      </form>
+    </details>
+  </td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% endblock %}

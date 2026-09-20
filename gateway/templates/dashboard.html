@@ -1,0 +1,59 @@
+{% extends "base.html" %}{% block title %}I miei fogli{% endblock %}
+{% block body %}
+<h1>I miei fogli</h1>
+<form class="panel row" method="post" action="{{ p }}/gw/sheets/new">
+  <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+  <div><label for="t">Titolo del nuovo foglio</label><input id="t" type="text" name="title" maxlength="120" placeholder="Es. Elenco defibrillatori 2026" required></div>
+  <button>Crea e apri</button>
+</form>
+
+<h2>{{ sheets|length }} {{ 'foglio' if sheets|length == 1 else 'fogli' }}</h2>
+{% if not sheets %}
+<p class="panel mute">Non hai ancora fogli. Creane uno dal modulo qui sopra: solo tu potrai modificarlo, mentre l'esportazione CSV potrà essere pubblica.</p>
+{% else %}
+<div class="scroll"><table>
+<thead><tr><th>Titolo</th><th>Esportazione pubblica</th><th>Creato il</th><th>Gestione</th></tr></thead>
+<tbody>
+{% for s in sheets %}
+<tr>
+  <td><a href="{{ p }}/gw/open/{{ s.id }}"><strong>{{ s.title }}</strong></a><br><span class="mute">{{ s.id }}</span></td>
+  <td>{% if s.public_export %}<span class="tag">Attiva</span>
+      <p style="margin:.5rem 0"><a href="{{ p }}/{{ s.id }}.csv"><code>{{ base }}/{{ s.id }}.csv</code></a></p>
+      <span class="mute">Altri formati:
+        <a href="{{ p }}/{{ s.id }}.csv.json">JSON</a> ·
+        <a href="{{ p }}/{{ s.id }}.xlsx">XLSX</a> ·
+        <a href="{{ p }}/{{ s.id }}.ods">ODS</a> ·
+        <a href="{{ p }}/{{ s.id }}.html">HTML</a></span>
+      {% else %}<span class="tag off">Disattivata</span><br><span class="mute">Il CSV è scaricabile solo da te.</span>{% endif %}</td>
+  <td>{{ s.created_at|dt }}</td>
+  <td>
+    <details><summary>Modifica</summary>
+      <form method="post" action="{{ p }}/gw/sheets/{{ s.id }}/update">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <label for="t{{ loop.index }}">Titolo</label><input id="t{{ loop.index }}" type="text" name="title" value="{{ s.title }}" maxlength="120">
+        <label class="check"><input type="checkbox" name="public_export" value="1" {{ 'checked' if s.public_export }}> Esportazione pubblica in sola lettura</label>
+        <button class="ghost">Salva</button>
+      </form>
+    </details>
+    <details><summary>Importa CSV</summary>
+      <form method="post" action="{{ p }}/gw/sheets/{{ s.id }}/import" enctype="multipart/form-data">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <label for="f{{ loop.index }}">File CSV (max 10 MB)</label>
+        <input id="f{{ loop.index }}" type="file" name="file" accept=".csv,text/csv" required>
+        <span class="mute">Sostituisce l'intero contenuto del foglio.</span>
+        <button class="ghost">Importa</button>
+      </form>
+    </details>
+    <details><summary>Elimina</summary>
+      <form method="post" action="{{ p }}/gw/sheets/{{ s.id }}/delete">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <span>Il foglio e i suoi dati verranno cancellati in modo definitivo.</span>
+        <button class="danger">Elimina definitivamente</button>
+      </form>
+    </details>
+  </td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% endif %}
+{% endblock %}

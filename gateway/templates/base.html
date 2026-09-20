@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Fogli di calcolo{% endblock %} · Fogli condivisi</title>
+<style>
+:root{--ink:#17324d;--blue:#0066cc;--blue-d:#004d99;--line:#d6dce3;--bg:#f5f7fa;--ok:#00724a;--err:#b3001e;--mute:#5a6772}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 "Titillium Web",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--blue)} a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #ff9900;outline-offset:2px}
+header{background:var(--blue);color:#fff}
+header .in{max-width:1080px;margin:auto;padding:.9rem 1.25rem;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+header strong{font-size:1.2rem;letter-spacing:.01em}
+header nav{display:flex;gap:1.1rem;flex:1;flex-wrap:wrap} header a{color:#fff;text-decoration:none;border-bottom:2px solid transparent;padding:.15rem 0}
+header a[aria-current]{border-color:#fff} header a:hover{border-color:rgba(255,255,255,.6)}
+header form{margin:0;display:flex;gap:.75rem;align-items:center;font-size:.92rem}
+main{max-width:1080px;margin:auto;padding:1.75rem 1.25rem 4rem}
+h1{font-size:1.9rem;line-height:1.2;margin:.2rem 0 1.2rem} h2{font-size:1.2rem;margin:2.2rem 0 .8rem}
+.panel{background:#fff;border:1px solid var(--line);border-radius:4px;padding:1.25rem}
+.msg{padding:.75rem 1rem;border-left:4px solid var(--ok);background:#fff;margin-bottom:1.25rem}
+.msg.err{border-color:var(--err)}
+label{display:block;font-weight:600;font-size:.92rem;margin-bottom:.25rem}
+input[type=text],input[type=password],select{width:100%;padding:.6rem .7rem;border:1px solid #5c6f82;border-radius:4px;font:inherit;background:#fff}
+.row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap} .row>div{flex:1;min-width:180px}
+button,.btn{font:inherit;font-weight:600;padding:.6rem 1.15rem;border-radius:4px;border:2px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--blue-d);border-color:var(--blue-d)}
+button.ghost{background:#fff;color:var(--blue)} button.ghost:hover{background:#e6f0fa}
+button.danger{background:#fff;color:var(--err);border-color:var(--err)} button.danger:hover{background:#fbe9ec}
+header button{background:transparent;border-color:#fff;padding:.3rem .8rem}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+th,td{text-align:left;padding:.7rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.85rem;color:var(--mute);font-weight:600;background:#fafbfc}
+.scroll{overflow-x:auto} code{display:inline-block;max-width:100%;font:0.88em ui-monospace,Menlo,Consolas,monospace;background:#eef2f6;padding:.1rem .35rem;border-radius:3px;word-break:break-all}
+.tag{font-size:.8rem;font-weight:600;padding:.1rem .5rem;border-radius:3px;background:#e6f0fa;color:var(--blue-d);white-space:nowrap}
+.tag.off{background:#eceff1;color:var(--mute)} .mute{color:var(--mute);font-size:.9rem}
+details summary{cursor:pointer;color:var(--blue);font-weight:600} details[open] summary{margin-bottom:.7rem}
+details form{display:grid;gap:.6rem;min-width:240px} .check{display:flex;gap:.5rem;align-items:center;font-weight:400}
+.login{max-width:420px;margin:8vh auto 0} .login form{display:grid;gap:1rem}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <strong>Fogli condivisi</strong>
+  {% if sess %}
+  <nav aria-label="Principale">
+    <a href="{{ p }}/gw/" {% if request.url.path.endswith('/gw/') %}aria-current="page"{% endif %}>I miei fogli</a>
+    <a href="{{ p }}/gw/guida" {% if 'guida' in request.url.path %}aria-current="page"{% endif %}>Guida</a>
+    {% if sess.role == 'admin' %}
+    <a href="{{ p }}/gw/admin/users" {% if 'admin/users' in request.url.path %}aria-current="page"{% endif %}>Utenti</a>
+    <a href="{{ p }}/gw/admin/sheets" {% if 'admin/sheets' in request.url.path %}aria-current="page"{% endif %}>Tutti i fogli</a>
+    <a href="{{ p }}/gw/admin/audit" {% if 'admin/audit' in request.url.path %}aria-current="page"{% endif %}>Registro attività</a>
+    {% endif %}
+  </nav>
+  <form method="post" action="{{ p }}/gw/logout">
+    <a href="{{ p }}/gw/password">{{ sess.full_name or sess.username }}</a>
+    <input type="hidden" name="csrf" value="{{ sess.csrf }}"><button>Esci</button>
+  </form>
+  {% endif %}
+</div></header>
+<main>
+{% if message %}<div class="msg {{ 'err' if is_error }}" role="status">{{ message }}</div>{% endif %}
+{% block body %}{% endblock %}
+</main>
+</body>
+</html>

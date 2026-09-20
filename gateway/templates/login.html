@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Accesso{% endblock %}
+{% block body %}
+<div class="login">
+  <h1>Accedi</h1>
+  {% if error %}<div class="msg err" role="alert">Credenziali non valide oppure account temporaneamente bloccato.</div>{% endif %}
+  <form class="panel" method="post" action="{{ p }}/gw/login" autocomplete="on">
+    <div><label for="u">Nome utente</label><input id="u" type="text" name="username" autocomplete="username" required autofocus></div>
+    <div><label for="p">Password</label><input id="p" type="password" name="password" autocomplete="current-password" required></div>
+    <button>Accedi</button>
+  </form>
+  <p class="mute">Le credenziali sono rilasciate dall'amministratore. Dopo 5 tentativi errati l'account resta bloccato per 15 minuti.</p>
+</div>
+{% endblock %}

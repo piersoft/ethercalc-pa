@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% block title %}Guida{% endblock %}
+{% block body %}
+<h1>Guida all'uso</h1>
+<p class="mute">Come funzionano i fogli condivisi, che cosa fa ciascuna scheda dell'editor e che cosa è visibile all'esterno.</p>
+
+<h2>I tuoi fogli</h2>
+<div class="panel">
+  <p><strong>Creare.</strong> Dalla pagina <a href="{{ p }}/gw/">I miei fogli</a>, scrivi un titolo e premi Crea e apri. Il foglio è modificabile solo da te.</p>
+  <p><strong>Importare un CSV.</strong> Apri Importa CSV sulla riga del foglio e carica il file, fino a 10 MB. L'importazione <em>sostituisce</em> l'intero contenuto del foglio, quindi non aggiunge righe a quelle esistenti. Sono accettati i CSV salvati da Excel, anche con gli accenti.</p>
+  <p><strong>Esportazione pubblica.</strong> Quando è attiva, chiunque abbia il collegamento può <em>scaricare</em> il foglio in CSV, JSON, XLSX, ODS e HTML, senza autenticarsi e senza poterlo modificare. È il collegamento da pubblicare in un catalogo open data. Se la disattivi, il foglio resta scaricabile solo da te.</p>
+  <p><strong>Modificare o eliminare.</strong> Dalla riga del foglio puoi cambiare titolo, attivare o disattivare l'esportazione ed eliminarlo. L'eliminazione è definitiva.</p>
+</div>
+
+<h2>Le schede dell'editor</h2>
+<div class="scroll"><table>
+<thead><tr><th>Scheda</th><th>A cosa serve</th></tr></thead>
+<tbody>
+<tr><td><strong>Modifica</strong></td><td>Le operazioni di tutti i giorni: annulla e ripeti, copia, taglia e incolla, inserimento ed eliminazione di righe e colonne, grassetto e corsivo, allineamento, somma automatica ed elenco delle funzioni.</td></tr>
+<tr><td><strong>Formato</strong></td><td>L'aspetto. In alto scegli se agire sulla cella selezionata o sull'intero foglio: carattere, colori, bordi, spaziatura, formato dei numeri e delle date, larghezza delle colonne.</td></tr>
+<tr><td><strong>Ordina</strong></td><td>Riordina le righe. Indichi l'intervallo di celle da ordinare, poi fino a tre criteri in successione: il primo decide l'ordine, gli altri si applicano a parità di valore. Utile per ordinare per data o per comune.</td></tr>
+<tr><td><strong>Revisioni</strong></td><td>L'elenco delle operazioni eseguite <em>in questa sessione</em>, nell'ordine in cui sono avvenute, con in fondo quelle annullate. Serve a ricostruire cosa è stato fatto da quando hai aperto il foglio. Non è uno storico permanente: ricaricando la pagina riparte da zero. Lo storico di chi crea, importa ed elimina i fogli sta invece nel registro attività, consultabile dagli amministratori.</td></tr>
+<tr><td><strong>Commento</strong></td><td>Una nota di testo agganciata alla cella selezionata, che resta salvata nel foglio. Utile per spiegare una voce anomala o segnalare un dato da verificare, senza sporcare i dati.</td></tr>
+<tr><td><strong>Nomi</strong></td><td>Dà un nome parlante a una cella o a un intervallo, con una descrizione facoltativa. Dopo averlo definito puoi usarlo nelle formule al posto delle coordinate: <code>=SUM(incassi)</code> invece di <code>=SUM(B2:B50)</code>. Le formule restano leggibili anche se le colonne si spostano.</td></tr>
+</tbody></table></div>
+
+<h2>Lavorare con le formule</h2>
+<div class="panel">
+  <p>Una formula inizia con <code>=</code>. I nomi delle funzioni restano in inglese, come nello standard dei fogli di calcolo: <code>=SUM(A1:A10)</code>, <code>=AVERAGE(B2:B50)</code>, <code>=IF(C2&gt;100;"alto";"normale")</code>.</p>
+  <p>L'elenco completo, con la descrizione in italiano e gli argomenti attesi, è nella scheda Modifica alla voce Funzioni.</p>
+  <p class="mute">Le modifiche si salvano da sole, cella per cella: non esiste un pulsante Salva. Per caricare molti dati in una volta usa Importa CSV, non l'incollaggio.</p>
+</div>
+
+<h2>Chi vede cosa</h2>
+<div class="panel">
+  <p>Per entrare nell'editor servono le credenziali, e ciascuno vede solo i fogli di cui è proprietario. Dall'esterno, senza autenticazione, è raggiungibile soltanto l'esportazione in sola lettura dei fogli con l'esportazione pubblica attiva: il collegamento non consente di modificare nulla né di scoprire gli altri fogli.</p>
+  <p>Accessi, importazioni ed eliminazioni finiscono nel registro attività, scaricabile in CSV dagli amministratori.</p>
+</div>
+{% endblock %}

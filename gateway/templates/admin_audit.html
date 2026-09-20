@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Registro attività{% endblock %}
+{% block body %}
+<h1>Registro attività</h1>
+<p><a class="btn" href="{{ p }}/gw/admin/audit?fmt=csv">Scarica il registro completo in CSV</a></p>
+<p class="mute">Ultimi 500 eventi: accessi riusciti e falliti, creazione, modifica ed eliminazione di fogli, gestione utenti.</p>
+<div class="scroll"><table>
+<thead><tr><th>Data e ora</th><th>Utente</th><th>Indirizzo IP</th><th>Azione</th><th>Dettaglio</th></tr></thead>
+<tbody>{% for r in rows %}<tr><td>{{ r.ts|dt }}</td><td>{{ r.username }}</td><td>{{ r.ip }}</td><td><code>{{ r.action }}</code></td><td>{{ r.detail }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

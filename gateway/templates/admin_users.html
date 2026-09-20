@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% block title %}Utenti{% endblock %}
+{% block body %}
+<h1>Utenti</h1>
+<form class="panel" method="post" action="{{ p }}/gw/admin/users/save">
+  <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+  <div class="row">
+    <div><label for="un">Nome utente</label><input id="un" type="text" name="username" pattern="[a-z0-9][a-z0-9._\-]{2,63}" required></div>
+    <div><label for="fn">Nome e cognome</label><input id="fn" type="text" name="full_name" maxlength="120"></div>
+    <div><label for="ro">Ruolo</label><select id="ro" name="role"><option value="user">Utente</option><option value="admin">Amministratore</option></select></div>
+    <div><label for="pw">Password provvisoria</label><input id="pw" type="password" name="password" minlength="12" autocomplete="new-password" required></div>
+    <button>Crea utente</button>
+  </div>
+  <p class="mute">Al primo accesso l'utente dovrà sostituire la password provvisoria.</p>
+</form>
+<h2>{{ users|length }} utenti registrati</h2>
+<div class="scroll"><table>
+<thead><tr><th>Utente</th><th>Ruolo</th><th>Stato</th><th>Fogli</th><th>Gestione</th></tr></thead>
+<tbody>
+{% for u in users %}
+<tr>
+  <td><strong>{{ u.username }}</strong><br><span class="mute">{{ u.full_name }}</span></td>
+  <td>{{ 'Amministratore' if u.role == 'admin' else 'Utente' }}</td>
+  <td>{% if not u.active %}<span class="tag off">Disattivato</span>{% elif u.locked_until > now %}<span class="tag off">Bloccato</span>{% else %}<span class="tag">Attivo</span>{% endif %}
+      {% if u.must_change %}<br><span class="mute">Password da cambiare</span>{% endif %}</td>
+  <td>{{ u.n }}</td>
+  <td>
+    <details><summary>Reimposta password</summary>
+      <form method="post" action="{{ p }}/gw/admin/users/{{ u.id }}/reset">
+        <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+        <label for="r{{ u.id }}">Nuova password provvisoria</label><input id="r{{ u.id }}" type="password" name="password" minlength="12" autocomplete="new-password" required>
+        <button class="ghost">Reimposta</button>
+      </form>
+    </details>
+    {% if u.id != sess.uid %}
+    <form method="post" action="{{ p }}/gw/admin/users/{{ u.id }}/{{ 'disable' if u.active else 'enable' }}" style="margin-top:.5rem">
+      <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+      <button class="{{ 'danger' if u.active else 'ghost' }}">{{ 'Disattiva' if u.active else 'Riattiva' }}</button>
+    </form>
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% endblock %}

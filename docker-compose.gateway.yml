@@ -1,0 +1,46 @@
+# Override da usare INSIEME a docker-compose.proxy.yml (vedi COMPOSE_FILE in .env).
+# Il TLS e l'ingresso pubblico sono gestiti dall'nginx di CKAN: i container
+# si affacciano sulla rete esterna ckan212_webnet e non pubblicano porte.
+services:
+  gateway:
+    build: ./gateway
+    image: ethercalc-gateway:local
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    expose:
+      - "9000"
+    volumes:
+      - ./gateway-data:/data
+    environment:
+      ETHERCALC_KEY: "${ETHERCALC_KEY:?ETHERCALC_KEY obbligatoria}"
+      ETHERCALC_URL: "http://ethercalc:8000"
+      GW_PREFIX: "${GW_PREFIX:-}"
+      GW_COOKIE_SECURE: "${GW_COOKIE_SECURE:-0}"
+    networks:
+      default:
+      webnet:
+        aliases: [gateway]
+    depends_on:
+      ethercalc:
+        condition: service_healthy
+
+  ethercalc:
+    environment:
+      ETHERCALC_BASEPATH: "${GW_PREFIX:-}"
+    networks:
+      default:
+      webnet:
+        aliases: [ethercalc]
+
+  # L'nginx dedicato non serve piu': resta definito ma non viene avviato.
+  proxy:
+    profiles: ["standalone"]
+
+networks:
+  webnet:
+    external: true
+    name: ckan212_webnet
